@@ -1,5 +1,5 @@
 import Papa from "papaparse";
-import type { ColumnMeta } from "./types";
+import type { ColumnMeta, Dataset, Row } from "./types";
 
 export function readCsv(csvText: string): Record<string, string>[] {
   const parsed = Papa.parse<Record<string, string>>(csvText, {
@@ -53,4 +53,23 @@ export function detectMetricColumn(columns: ColumnMeta[]): string | null {
   );
 
   return preferred?.key ?? numberColumns[0]?.key ?? null;
+}
+
+export function parseDataset(csvText: string): Dataset {
+  const raw = readCsv(csvText);
+  const columns = detectColumns(raw);
+  const labelColumn = detectLabelColumn(raw, columns);
+  const metricColumn = detectMetricColumn(columns);
+
+  const rows: Row[] = raw.map((r) => {
+    const row: Row = {};
+    for (const col of columns) {
+      const value = (r[col.key] ?? "").trim();
+      row[col.key] =
+        col.type === "number" ? toNumber(value) : value === "" ? null : value;
+    }
+    return row;
+  });
+
+  return { columns, rows, labelColumn, metricColumn };
 }
