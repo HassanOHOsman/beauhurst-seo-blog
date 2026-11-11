@@ -1,14 +1,9 @@
 import { readFileSync } from "node:fs";
 import { parseDataset } from "../utils/parseDataset";
+import { computeStats } from "../utils/computeStats";
 
 export default defineEventHandler(() => {
   const csv = readFileSync("data/fintech_companies_seed.csv", "utf-8");
-  const ds = parseDataset(csv);
-  return {
-    columns: ds.columns,
-    labelColumn: ds.labelColumn,
-    metricColumn: ds.metricColumn,
-    rowCount: ds.rows.length,
-    firstRow: ds.rows[0],
-  };
+  const stats = computeStats(parseDataset(csv));
+  return { ...stats, rankedRows: stats.rankedRows.slice(0, 3) };
 });
