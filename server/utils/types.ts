@@ -6,3 +6,10 @@ export interface ColumnMeta {
 }
 
 export type Row = Record<string, string | number | null>;
+
+export interface Dataset {
+  columns: ColumnMeta[];
+  rows: Row[];
+  labelColumn: string;
+  metricColumn: string | null;
+}
