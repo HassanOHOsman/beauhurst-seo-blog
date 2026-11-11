@@ -44,3 +44,13 @@ export function detectLabelColumn(
 
   return ranked[0]?.key ?? columns[0]?.key ?? "";
 }
+
+export function detectMetricColumn(columns: ColumnMeta[]): string | null {
+  const numberColumns = columns.filter((c) => c.type === "number");
+
+  const preferred = numberColumns.find((c) =>
+    /fund|rais|revenue|valuation|total/i.test(c.key)
+  );
+
+  return preferred?.key ?? numberColumns[0]?.key ?? null;
+}
