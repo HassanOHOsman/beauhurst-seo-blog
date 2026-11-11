@@ -58,6 +58,59 @@ export function summariseMetric(ds: Dataset): MetricSummary | null {
 }
 
 
+export interface CategoryGroup {
+  name: string;
+  count: number;
+  total: number;
+}
+
+export interface CategoryBreakdown {
+  column: string;
+  groups: CategoryGroup[];
+}
+
+export function groupByCategory(ds: Dataset): CategoryBreakdown[] {
+  const { rows, columns, labelColumn, metricColumn } = ds;
+
+  const candidates = columns.filter(
+    (c) => c.type === "text" && c.key !== labelColumn
+  );
+
+  const breakdowns = candidates.map((col) => {
+    const map = new Map<string, CategoryGroup>();
+
+    for (const row of rows) {
+      const cell = row[col.key];
+      if (typeof cell !== "string") continue;
+
+      const metric = metricColumn ? row[metricColumn] : null;
+      const amount = typeof metric === "number" ? metric : 0;
+
+      // A cell can hold several values, e.g. "Software; Wealth management"
+      const names = cell
+        .split(";")
+        .map((n) => n.trim())
+        .filter(Boolean);
+
+      for (const name of names) {
+        const group = map.get(name) ?? { name, count: 0, total: 0 };
+        group.count += 1;
+        group.total += amount;
+        map.set(name, group);
+      }
+    }
+
+    const groups = [...map.values()].sort((a, b) => b.count - a.count);
+    return { column: col.key, groups };
+  });
+
+  // Keep only columns that genuinely group rows
+  return breakdowns
+    .filter((b) => b.groups.length >= 2 && b.groups.length <= rows.length / 2)
+    .map((b) => ({ ...b, groups: b.groups.slice(0, 8) }));
+}
+
+
 export function computeStats(ds: Dataset) {
   return {
     rowCount: ds.rows.length,
