@@ -56,3 +56,13 @@ export function summariseMetric(ds: Dataset): MetricSummary | null {
     top10SharePct: total ? (top10Total / total) * 100 : 0,
   };
 }
+
+
+export function computeStats(ds: Dataset) {
+  return {
+    rowCount: ds.rows.length,
+    rankedRows: rankRows(ds),
+    metric: summariseMetric(ds),
+    categories: groupByCategory(ds),
+  };
+}
