@@ -28,3 +28,19 @@ export function detectColumns(rows: Record<string, string>[]): ColumnMeta[] {
     return { key, type: isNumber ? "number" : "text" };
   });
 }
+
+export function detectLabelColumn(
+  rows: Record<string, string>[],
+  columns: ColumnMeta[]
+): string {
+  const textColumns = columns.filter((c) => c.type === "text");
+
+  const ranked = textColumns
+    .map((c) => ({
+      key: c.key,
+      unique: new Set(rows.map((r) => (r[c.key] ?? "").trim())).size,
+    }))
+    .sort((a, b) => b.unique - a.unique);
+
+  return ranked[0]?.key ?? columns[0]?.key ?? "";
+}
