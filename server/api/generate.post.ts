@@ -43,7 +43,7 @@ export default defineEventHandler(async (event) => {
     stats,
   });
 
-  return { topic, copy };
+  return { slug };
 
   
 });
