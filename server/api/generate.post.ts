@@ -1,5 +1,7 @@
 import { parseDataset } from "../utils/parseDataset";
 import { computeStats } from "../utils/computeStats";
+import { buildSummary } from "../utils/buildSummary";
+import { generateCopy } from "../utils/generateCopy";
 
 export default defineEventHandler(async (event) => {
   const parts = await readMultipartFormData(event);
@@ -26,6 +28,11 @@ export default defineEventHandler(async (event) => {
 
   const ds = parseDataset(csv);
   const stats = computeStats(ds);
+  const summary = buildSummary(ds, stats, topic);
+  const { geminiApiKey } = useRuntimeConfig();
+  const copy = await generateCopy(geminiApiKey, summary);
 
-  return { topic, rowCount: stats.rowCount, metric: stats.metric };
+  return { topic, copy };
+
+  
 });
