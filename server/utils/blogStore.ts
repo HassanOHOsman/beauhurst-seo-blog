@@ -26,3 +26,7 @@ export async function uniqueSlug(topic: string): Promise<string> {
   }
   return slug;
 }
+
+export async function saveBlog(blog: StoredBlog): Promise<void> {
+  await blogs().setItem(blog.slug, blog);
+}
