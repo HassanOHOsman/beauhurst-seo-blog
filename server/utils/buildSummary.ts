@@ -10,3 +10,14 @@ function topRows(ds: Dataset, stats: Stats, n = 10) {
     metric: ds.metricColumn ? r[ds.metricColumn] : null,
   }));
 }
+
+
+export function buildSummary(ds: Dataset, stats: Stats) {
+  return {
+    rowCount: stats.rowCount,
+    labelColumn: ds.labelColumn,
+    metricColumn: ds.metricColumn,
+    columns: ds.columns.map((c) => c.key),
+    top10: topRows(ds, stats),
+  };
+}
