@@ -1,11 +1,17 @@
 <script setup lang="ts">
+const loading = ref(false);
 async function onSubmit(event: Event) {
   const form = event.target as HTMLFormElement;
-  const { slug } = await $fetch<{ slug: string }>("/api/generate", {
-    method: "POST",
-    body: new FormData(form),
-  });
-  await navigateTo(`/blog/${slug}`);
+  loading.value = true;
+  try {
+    const { slug } = await $fetch<{ slug: string }>("/api/generate", {
+      method: "POST",
+      body: new FormData(form),
+    });
+    await navigateTo(`/blog/${slug}`);
+  } finally {
+    loading.value = false;
+  }
 }
 </script>
 <template>
@@ -26,7 +32,9 @@ async function onSubmit(event: Event) {
       <label for="file">CSV file</label>
       <input id="file" name="file" type="file" accept=".csv,text/csv" required />
 
-      <button type="submit">Generate blog</button>
+      <button type="submit" :disabled="loading">
+        {{ loading ? "Generating… this can take a few seconds" : "Generate blog" }}
+      </button>
     </form>
   </main>
 </template>
