@@ -13,6 +13,7 @@ export async function generateCopy(apiKey: string, summary: unknown) {
     contents: buildContents(summary),
     config: {
       systemInstruction: SYSTEM_INSTRUCTION,
+      responseMimeType: "application/json",
     },
   });
 
