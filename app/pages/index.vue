@@ -1,9 +1,19 @@
+<script setup lang="ts">
+async function onSubmit(event: Event) {
+  const form = event.target as HTMLFormElement;
+  const { slug } = await $fetch<{ slug: string }>("/api/generate", {
+    method: "POST",
+    body: new FormData(form),
+  });
+  await navigateTo(`/blog/${slug}`);
+}
+</script>
 <template>
   <main>
     <h1>Generate an SEO blog from a CSV</h1>
     <p>Upload a company dataset and give it a topic. We'll write the blog.</p>
 
-    <form>
+    <form @submit.prevent="onSubmit">
       <label for="topic">Topic</label>
       <input
         id="topic"
