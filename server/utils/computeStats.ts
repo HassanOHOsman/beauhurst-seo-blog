@@ -106,7 +106,7 @@ export function groupByCategory(ds: Dataset): CategoryBreakdown[] {
 
   // Keep only columns that genuinely group rows
   return breakdowns
-    .filter((b) => b.groups.length >= 2 && b.groups.length <= rows.length / 2)
+    .filter((b) => b.groups.length >= 2 && (b.groups[0]?.count ?? 0) >= 2)
     .map((b) => ({ ...b, groups: b.groups.slice(0, 8) }));
 }
 
