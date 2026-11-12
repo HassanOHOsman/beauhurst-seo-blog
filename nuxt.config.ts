@@ -5,4 +5,9 @@ export default defineNuxtConfig({
   runtimeConfig: {
     geminiApiKey: "",
   },
+  nitro: {
+    devStorage: {
+      blogs: { driver: "fs", base: "./.data/blogs" },
+    },
+  },
 });
