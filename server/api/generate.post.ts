@@ -18,6 +18,12 @@ export default defineEventHandler(async (event) => {
   const csv = filePart.data.toString("utf-8");
   const topic = topicPart?.data.toString("utf-8").trim() ?? "";
 
+    if (!topic)
+      throw createError({
+        statusCode: 400,
+        statusMessage: "Please enter a topic",
+      });
+
   const ds = parseDataset(csv);
   const stats = computeStats(ds);
 
