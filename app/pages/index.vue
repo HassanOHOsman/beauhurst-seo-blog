@@ -1,7 +1,9 @@
 <script setup lang="ts">
 const loading = ref(false);
+const error = ref("");
 async function onSubmit(event: Event) {
   const form = event.target as HTMLFormElement;
+  error.value = "";
   loading.value = true;
   try {
     const { slug } = await $fetch<{ slug: string }>("/api/generate", {
@@ -9,6 +11,9 @@ async function onSubmit(event: Event) {
       body: new FormData(form),
     });
     await navigateTo(`/blog/${slug}`);
+  } catch (err: any){
+    error.value =
+        err?.data?.statusMessage || "Something went wrong. Please try again.";
   } finally {
     loading.value = false;
   }
@@ -35,6 +40,7 @@ async function onSubmit(event: Event) {
       <button type="submit" :disabled="loading">
         {{ loading ? "Generating… this can take a few seconds" : "Generate blog" }}
       </button>
+      <p v-if="error" role="alert">{{ error }}</p>
     </form>
   </main>
 </template>
