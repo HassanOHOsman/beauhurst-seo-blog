@@ -53,5 +53,30 @@ const tableColumns = [
       <h2>{{ insight.heading }}</h2>
       <p>{{ insight.body }}</p>
     </section>
+    <section aria-labelledby="ranking-heading">
+      <h2 id="ranking-heading">Full ranking</h2>
+      <table>
+        <caption>
+          All {{ blog.stats.rowCount }} entries ranked by
+          {{ metricKey ?? "order in the dataset" }}
+        </caption>
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th v-for="col in tableColumns" :key="col" scope="col">
+              {{ col }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="row in blog.stats.rankedRows" :key="row.rank">
+            <td>{{ row.rank }}</td>
+            <td v-for="col in tableColumns" :key="col">
+              {{ col === metricKey ? formatFull(row[col]) : row[col] }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
   </main>
 </template>
