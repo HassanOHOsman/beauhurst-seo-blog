@@ -2,6 +2,7 @@ import { parseDataset } from "../utils/parseDataset";
 import { computeStats } from "../utils/computeStats";
 import { buildSummary } from "../utils/buildSummary";
 import { generateCopy } from "../utils/generateCopy";
+import { saveBlog, uniqueSlug } from "../utils/blogStore";
 
 export default defineEventHandler(async (event) => {
   const parts = await readMultipartFormData(event);
@@ -31,6 +32,16 @@ export default defineEventHandler(async (event) => {
   const summary = buildSummary(ds, stats, topic);
   const { geminiApiKey } = useRuntimeConfig();
   const copy = await generateCopy(geminiApiKey, summary);
+
+  const slug = await uniqueSlug(topic);
+  await saveBlog({
+    slug,
+    topic,
+    createdAt: new Date().toISOString(),
+    labelColumn: ds.labelColumn,
+    copy,
+    stats,
+  });
 
   return { topic, copy };
 
