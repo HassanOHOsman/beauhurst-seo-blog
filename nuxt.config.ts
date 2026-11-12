@@ -10,4 +10,5 @@ export default defineNuxtConfig({
       blogs: { driver: "fs", base: "./.data/blogs" },
     },
   },
+  css: ["~/assets/css/main.css"],
 });
