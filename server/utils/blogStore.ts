@@ -13,3 +13,16 @@ const blogs = () => useStorage("blogs");
 export async function getBlog(slug: string): Promise<StoredBlog | null> {
   return await blogs().getItem<StoredBlog>(slug);
 }
+
+
+export async function uniqueSlug(topic: string): Promise<string> {
+  const base = slugify(topic) || "blog";
+  let slug = base;
+  let n = 2;
+
+  while (await getBlog(slug)) {
+    slug = `${base}-${n}`;
+    n += 1;
+  }
+  return slug;
+}
