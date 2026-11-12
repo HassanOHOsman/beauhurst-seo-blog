@@ -1,3 +1,6 @@
+import { parseDataset } from "../utils/parseDataset";
+import { computeStats } from "../utils/computeStats";
+
 export default defineEventHandler(async (event) => {
   const parts = await readMultipartFormData(event);
   if (!parts)
@@ -15,5 +18,8 @@ export default defineEventHandler(async (event) => {
   const csv = filePart.data.toString("utf-8");
   const topic = topicPart?.data.toString("utf-8").trim() ?? "";
 
-  return { csvLength: csv.length, topic };
+  const ds = parseDataset(csv);
+  const stats = computeStats(ds);
+
+  return { topic, rowCount: stats.rowCount, metric: stats.metric };
 });
