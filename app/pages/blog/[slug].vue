@@ -20,6 +20,27 @@ useSeoMeta({
   <main>
     <h1>{{ blog.copy.title }}</h1>
     <p>{{ blog.copy.intro }}</p>
+    <section v-if="blog.stats.metric" aria-label="Key statistics">
+      <h2>{{ blog.stats.metric.key }} at a glance</h2>
+      <dl>
+        <div>
+          <dt>Total</dt>
+          <dd>{{ formatNumber(blog.stats.metric.total) }}</dd>
+        </div>
+        <div>
+          <dt>Average</dt>
+          <dd>{{ formatNumber(blog.stats.metric.average) }}</dd>
+        </div>
+        <div>
+          <dt>Median</dt>
+          <dd>{{ formatNumber(blog.stats.metric.median) }}</dd>
+        </div>
+        <div>
+          <dt>Top 10 share</dt>
+          <dd>{{ formatPercent(blog.stats.metric.top10SharePct) }}</dd>
+        </div>
+      </dl>
+    </section>
     <section v-for="insight in blog.copy.insights" :key="insight.heading">
       <h2>{{ insight.heading }}</h2>
       <p>{{ insight.body }}</p>
