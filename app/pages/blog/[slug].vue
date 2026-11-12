@@ -28,9 +28,10 @@ const tableColumns = [
   <main>
     <h1>{{ blog.copy.title }}</h1>
     <p>{{ blog.copy.intro }}</p>
+
     <section v-if="blog.stats.metric" aria-label="Key statistics">
       <h2>{{ blog.stats.metric.key }} at a glance</h2>
-      <dl>
+      <dl class="stats">
         <div>
           <dt>Total</dt>
           <dd>{{ formatNumber(blog.stats.metric.total) }}</dd>
@@ -49,34 +50,53 @@ const tableColumns = [
         </div>
       </dl>
     </section>
+
     <section v-for="insight in blog.copy.insights" :key="insight.heading">
       <h2>{{ insight.heading }}</h2>
       <p>{{ insight.body }}</p>
     </section>
+
     <section aria-labelledby="ranking-heading">
       <h2 id="ranking-heading">Full ranking</h2>
-      <table>
-        <caption>
-          All {{ blog.stats.rowCount }} entries ranked by
-          {{ metricKey ?? "order in the dataset" }}
-        </caption>
-        <thead>
-          <tr>
-            <th scope="col">Rank</th>
-            <th v-for="col in tableColumns" :key="col" scope="col">
-              {{ col }}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in blog.stats.rankedRows" :key="row.rank">
-            <td>{{ row.rank }}</td>
-            <td v-for="col in tableColumns" :key="col">
-              {{ col === metricKey ? formatFull(row[col]) : row[col] }}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrap">
+        <table>
+          <caption>
+            All
+            {{
+              blog.stats.rowCount
+            }}
+            entries ranked by
+            {{
+              metricKey ?? "order in the dataset"
+            }}
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Rank</th>
+              <th
+                v-for="col in tableColumns"
+                :key="col"
+                scope="col"
+                :class="{ num: col === metricKey }"
+              >
+                {{ col }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="row in blog.stats.rankedRows" :key="row.rank">
+              <td>{{ row.rank }}</td>
+              <td
+                v-for="col in tableColumns"
+                :key="col"
+                :class="{ num: col === metricKey }"
+              >
+                {{ col === metricKey ? formatFull(row[col]) : row[col] }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </section>
   </main>
 </template>
