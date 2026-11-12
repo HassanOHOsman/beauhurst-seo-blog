@@ -18,6 +18,7 @@ useSeoMeta({
 
 <template>
   <main>
-    <h1>{{ blog?.copy.title }}</h1>
+    <h1>{{ blog.copy.title }}</h1>
+    <p>{{ blog.copy.intro }}</p>
   </main>
 </template>
