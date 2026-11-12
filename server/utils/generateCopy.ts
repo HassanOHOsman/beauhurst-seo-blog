@@ -1,11 +1,14 @@
 import { createClient, MODEL } from "./callGemini";
-import { SYSTEM_INSTRUCTION } from "./buildPrompt";
+import { SYSTEM_INSTRUCTION, type BlogCopy } from "./buildPrompt";
 
 export function buildContents(summary: unknown): string {
   return `Dataset summary:\n${JSON.stringify(summary)}`;
 }
 
-export async function generateCopy(apiKey: string, summary: unknown) {
+export async function generateCopy(
+  apiKey: string,
+  summary: unknown,
+): Promise<BlogCopy> {
   const ai = createClient(apiKey);
 
   const response = await ai.models.generateContent({
@@ -17,5 +20,7 @@ export async function generateCopy(apiKey: string, summary: unknown) {
     },
   });
 
-  return response.text;
+  const text = response.text;
+  if (!text) throw new Error("Gemini returned no text");
+  return JSON.parse(text) as BlogCopy;
 }
