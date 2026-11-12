@@ -12,8 +12,9 @@ function topRows(ds: Dataset, stats: Stats, n = 10) {
 }
 
 
-export function buildSummary(ds: Dataset, stats: Stats) {
+export function buildSummary(ds: Dataset, stats: Stats, topic: string) {
   return {
+    topic,
     rowCount: stats.rowCount,
     labelColumn: ds.labelColumn,
     metricColumn: ds.metricColumn,
