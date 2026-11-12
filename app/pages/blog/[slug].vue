@@ -20,5 +20,9 @@ useSeoMeta({
   <main>
     <h1>{{ blog.copy.title }}</h1>
     <p>{{ blog.copy.intro }}</p>
+    <section v-for="insight in blog.copy.insights" :key="insight.heading">
+      <h2>{{ insight.heading }}</h2>
+      <p>{{ insight.body }}</p>
+    </section>
   </main>
 </template>
