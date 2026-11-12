@@ -18,6 +18,8 @@ export function buildSummary(ds: Dataset, stats: Stats) {
     labelColumn: ds.labelColumn,
     metricColumn: ds.metricColumn,
     columns: ds.columns.map((c) => c.key),
+    metric: stats.metric,
+    categories: stats.categories,
     top10: topRows(ds, stats),
   };
 }
