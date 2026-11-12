@@ -1,5 +1,6 @@
 import { createClient, MODEL } from "./callGemini";
 import { SYSTEM_INSTRUCTION, type BlogCopy } from "./buildPrompt";
+import { withRetry } from "./withRetry";
 
 export function buildContents(summary: unknown): string {
   return `Dataset summary:\n${JSON.stringify(summary)}`;
@@ -11,14 +12,16 @@ export async function generateCopy(
 ): Promise<BlogCopy> {
   const ai = createClient(apiKey);
 
-  const response = await ai.models.generateContent({
-    model: MODEL,
-    contents: buildContents(summary),
-    config: {
-      systemInstruction: SYSTEM_INSTRUCTION,
-      responseMimeType: "application/json",
-    },
-  });
+  const response = await withRetry(() =>
+    ai.models.generateContent({
+      model: MODEL,
+      contents: buildContents(summary),
+      config: {
+        systemInstruction: SYSTEM_INSTRUCTION,
+        responseMimeType: "application/json",
+      },
+    })
+  );
 
   const text = response.text;
   if (!text) throw new Error("Gemini returned no text");
