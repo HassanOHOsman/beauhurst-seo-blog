@@ -14,6 +14,14 @@ useSeoMeta({
   title: blog.value.copy.title,
   description: blog.value.copy.metaDescription,
 });
+
+const metricKey = blog.value.stats.metric?.key ?? null;
+
+const tableColumns = [
+  blog.value.labelColumn,
+  ...(metricKey ? [metricKey] : []),
+  ...blog.value.stats.categories.slice(0, 2).map((c) => c.column),
+];
 </script>
 
 <template>
