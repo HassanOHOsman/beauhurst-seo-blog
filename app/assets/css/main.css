@@ -29,3 +29,31 @@ h1 {
 h2 {
   margin-top: 2.5rem;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+caption {
+  text-align: left;
+  color: var(--muted);
+  padding-bottom: 0.5rem;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  background: var(--card);
+  font-weight: 600;
+}
+
+tbody tr:hover {
+  background: var(--card);
+}
