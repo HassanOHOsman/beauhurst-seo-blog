@@ -19,7 +19,12 @@ export function buildSummary(ds: Dataset, stats: Stats, topic: string) {
     labelColumn: ds.labelColumn,
     metricColumn: ds.metricColumn,
     columns: ds.columns.map((c) => c.key),
-    metric: stats.metric,
+    metric: stats.metric
+      ? {
+          ...stats.metric,
+          top10SharePct: Math.round(stats.metric.top10SharePct * 10) / 10,
+        }
+      : null,
     categories: stats.categories,
     top10: topRows(ds, stats),
   };
