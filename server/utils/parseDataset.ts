@@ -29,6 +29,8 @@ export function detectColumns(rows: Record<string, string>[]): ColumnMeta[] {
   });
 }
 
+const NAME_HINT = /name|company|organi[sz]ation|business/i;
+
 export function detectLabelColumn(
   rows: Record<string, string>[],
   columns: ColumnMeta[]
@@ -36,11 +38,20 @@ export function detectLabelColumn(
   const textColumns = columns.filter((c) => c.type === "text");
 
   const ranked = textColumns
-    .map((c) => ({
-      key: c.key,
-      unique: new Set(rows.map((r) => (r[c.key] ?? "").trim())).size,
-    }))
-    .sort((a, b) => b.unique - a.unique);
+    .map((c) => {
+      const values = rows.map((r) => (r[c.key] ?? "").trim());
+      return {
+        key: c.key,
+        unique: new Set(values).size,
+        avgLen: values.reduce((sum, v) => sum + v.length, 0) / values.length,
+      };
+    })
+    .sort(
+      (a, b) =>
+        b.unique - a.unique ||
+        Number(NAME_HINT.test(b.key)) - Number(NAME_HINT.test(a.key)) ||
+        a.avgLen - b.avgLen
+    );
 
   return ranked[0]?.key ?? columns[0]?.key ?? "";
 }
