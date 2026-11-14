@@ -1,14 +1,21 @@
-import Papa from "papaparse";
+import { csvParse } from "d3-dsv";
 import type { ColumnMeta, Dataset, Row } from "./types";
 
 export function readCsv(csvText: string): Record<string, string>[] {
-  const parsed = Papa.parse<Record<string, string>>(csvText, {
-    header: true,
-    skipEmptyLines: true,
-    transformHeader: (h) => h.trim(),
-  });
-  if (!parsed.data.length) throw new Error("CSV has no rows");
-  return parsed.data;
+  const parsed = csvParse(csvText.replace(/^\uFEFF/, ""));
+
+  const rows = parsed
+    .map((row) => {
+      const clean: Record<string, string> = {};
+      for (const [key, value] of Object.entries(row)) {
+        clean[key.trim()] = value ?? "";
+      }
+      return clean;
+    })
+    .filter((row) => Object.values(row).some((v) => v.trim() !== ""));
+
+  if (!rows.length) throw new Error("CSV has no rows");
+  return rows;
 }
 
 const toNumber = (value: string): number | null => {
