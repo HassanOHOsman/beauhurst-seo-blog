@@ -12,7 +12,7 @@ export default defineNuxtConfig({
       nodeCompat: true,
       wrangler: {
         name: "beauhurst-seo-blog",
-        kv_namespaces: [{ binding: "BLOGS", id: "PASTE-NAMESPACE-ID" }],
+        kv_namespaces: [{ binding: "BLOGS", id: "39b5a93801dd4073a1a1260064b31e55" }],
       },
     },
     storage: {
