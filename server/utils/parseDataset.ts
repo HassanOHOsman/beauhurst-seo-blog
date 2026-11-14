@@ -1,18 +1,21 @@
-import { csvParse } from "d3-dsv";
+import { csvParseRows } from "d3-dsv";
 import type { ColumnMeta, Dataset, Row } from "./types";
 
 export function readCsv(csvText: string): Record<string, string>[] {
-  const parsed = csvParse(csvText.replace(/^\uFEFF/, ""));
+  const table = csvParseRows(csvText.replace(/^\uFEFF/, ""));
+  const [header, ...body] = table;
+  if (!header) throw new Error("CSV has no rows");
+  const keys = header.map((h) => h.trim());
 
-  const rows = parsed
-    .map((row) => {
-      const clean: Record<string, string> = {};
-      for (const [key, value] of Object.entries(row)) {
-        clean[key.trim()] = value ?? "";
-      }
-      return clean;
-    })
-    .filter((row) => Object.values(row).some((v) => v.trim() !== ""));
+  const rows = body
+    .filter((cells) => cells.some((c) => c.trim() !== ""))
+    .map((cells) => {
+      const row: Record<string, string> = {};
+      keys.forEach((key, i) => {
+        row[key] = cells[i] ?? "";
+      });
+      return row;
+    });
 
   if (!rows.length) throw new Error("CSV has no rows");
   return rows;
