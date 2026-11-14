@@ -21,29 +21,36 @@ export default defineEventHandler(async (event) => {
   const csv = filePart.data.toString("utf-8");
   const topic = topicPart?.data.toString("utf-8").trim() ?? "";
 
-    if (!topic)
-      throw createError({
-        statusCode: 400,
-        statusMessage: "Please enter a topic",
-      });
+  if (!topic)
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Please enter a topic",
+    });
 
-  const ds = parseDataset(csv);
-  const stats = computeStats(ds);
-  const summary = buildSummary(ds, stats, topic);
-  const { geminiApiKey } = useRuntimeConfig();
-  const copy = await generateCopy(geminiApiKey, summary);
+  try {
+    const ds = parseDataset(csv);
+    const stats = computeStats(ds);
+    const summary = buildSummary(ds, stats, topic);
+    const { geminiApiKey } = useRuntimeConfig();
+    if (!geminiApiKey) throw new Error("Gemini key is not set on this server");
+    const copy = await generateCopy(geminiApiKey, summary);
 
-  const slug = await uniqueSlug(topic);
-  await saveBlog({
-    slug,
-    topic,
-    createdAt: new Date().toISOString(),
-    labelColumn: ds.labelColumn,
-    copy,
-    stats,
-  });
+    const slug = await uniqueSlug(topic);
+    await saveBlog({
+      slug,
+      topic,
+      createdAt: new Date().toISOString(),
+      labelColumn: ds.labelColumn,
+      copy,
+      stats,
+    });
 
-  return { slug };
-
-  
+    return { slug };
+  } catch (err: any) {
+    console.error("generate failed:", err);
+    throw createError({
+      statusCode: 500,
+      statusMessage: String(err?.message ?? err).slice(0, 200),
+    });
+  }
 });
