@@ -41,7 +41,13 @@ app/pages/blog/[slug].vue    blog page template
 app/assets/css/main.css      styles
 server/api/generate.post.ts  CSV in, saved blog out
 server/api/blog/[slug].get.ts  loads a saved blog
-server/utils/                parser, stats, prompt, Gemini client, storage
+server/utils/parseDataset.ts   reads the CSV, detects column types, label and metric columns
+server/utils/computeStats.ts   ranking, totals, median, top-10 share, category breakdowns
+server/utils/buildSummary.ts   compact summary of the stats sent to the AI
+server/utils/buildPrompt.ts    system instruction and the BlogCopy type
+server/utils/generateCopy.ts   calls Gemini and parses the JSON reply
+server/utils/withRetry.ts      retries temporary Gemini failures with backoff
+server/utils/blogStore.ts      save, load and unique-slug helpers
 data/                        seed fintech CSV
 ```
 
