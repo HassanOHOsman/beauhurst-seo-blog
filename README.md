@@ -23,3 +23,24 @@ Generated blogs are saved by slug (for example `uk-fintech-companies`) and loade
 ### Request flow
 
 `Upload form` → `POST /api/generate` → parse CSV → compute stats → build summary → Gemini → save blog → redirect to `/blog/<slug>`
+
+
+## Tools
+
+- **Nuxt 4** (Vue 3, Nitro server) for the pages and API routes
+- **Google Gemini API** (`gemini-3.5-flash-lite`, free tier) via the `@google/genai` SDK
+- **d3-dsv** for CSV parsing
+- **Cloudflare Workers** for hosting and **Workers KV** for storing generated blogs
+- **GitHub** for source control, connected to Cloudflare for automatic deploys
+
+## Project structure
+
+```
+app/pages/index.vue          upload form
+app/pages/blog/[slug].vue    blog page template
+app/assets/css/main.css      styles
+server/api/generate.post.ts  CSV in, saved blog out
+server/api/blog/[slug].get.ts  loads a saved blog
+server/utils/                parser, stats, prompt, Gemini client, storage
+data/                        seed fintech CSV
+```
