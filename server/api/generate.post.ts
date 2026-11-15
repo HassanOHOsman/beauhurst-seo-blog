@@ -31,7 +31,7 @@ export default defineEventHandler(async (event) => {
     const ds = parseDataset(csv);
     const stats = computeStats(ds);
     const summary = buildSummary(ds, stats, topic);
-    const { geminiApiKey } = useRuntimeConfig();
+    const { geminiApiKey } = useRuntimeConfig(event);
     if (!geminiApiKey) throw new Error("Gemini key is not set on this server");
     const copy = await generateCopy(geminiApiKey, summary);
 
