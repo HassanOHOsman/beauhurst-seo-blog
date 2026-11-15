@@ -61,3 +61,21 @@ npm run dev
 Open http://localhost:3000, upload `data/fintech_companies_seed.csv` with the topic "UK fintech companies", and you are redirected to the generated blog. Locally, generated blogs are stored as files in `.data/blogs` (git-ignored).
 
 To check the production build: `npm run build`.
+
+
+## Configuration
+
+| Name | Where | Purpose |
+|------|-------|---------|
+| `NUXT_GEMINI_API_KEY` | `.env` locally; a **runtime secret** on the Cloudflare Worker | Gemini API key. Nuxt maps it to `runtimeConfig.geminiApiKey` and it is only readable on the server. |
+| `BLOGS` KV binding | `nuxt.config.ts` (`nitro.cloudflare.wrangler.kv_namespaces`) | Production storage for generated blogs. In development the same `blogs` store points at `.data/blogs`. |
+
+## Deployment (Cloudflare Workers)
+
+The repo is connected to a Cloudflare Worker, so every push to `main` builds and deploys automatically.
+
+- Build command: `npm run build`
+- Deploy command: `npx wrangler deploy`
+- Build variable: `NODE_VERSION=24`
+- Runtime secret: `NUXT_GEMINI_API_KEY`
+- KV namespace: `BLOGS`, bound in `nuxt.config.ts`
