@@ -1,75 +1,10 @@
-# Nuxt Minimal Starter
+# AI-Powered SEO Blog Generator
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Upload a CSV of companies, give it a topic, and get a server-rendered, SEO-optimised blog page with a ranking table, statistics and AI-written copy. Nothing is hardcoded for one industry, so the same app handles fintech, healthtech, cleantech and so on.
 
-## Setup
+## Live demo
 
-Make sure to install dependencies:
+- App: https://beauhurst-seo-blog.hassan-oh-osman.workers.dev/
+- Example (fintech): https://beauhurst-seo-blog.hassan-oh-osman.workers.dev/blog/uk-fintech-companies
 
-```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
-```
-
-## Production
-
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+To try it: open the app, enter a topic, choose a CSV file and click **Generate blog**. You are redirected to the new page.
