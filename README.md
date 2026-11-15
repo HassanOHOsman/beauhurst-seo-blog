@@ -79,3 +79,14 @@ The repo is connected to a Cloudflare Worker, so every push to `main` builds and
 - Build variable: `NODE_VERSION=24`
 - Runtime secret: `NUXT_GEMINI_API_KEY`
 - KV namespace: `BLOGS`, bound in `nuxt.config.ts`
+
+
+
+## Limitations
+
+- Label and metric columns are detected with heuristics (uniqueness, header names), so unusual CSVs may pick the wrong column.
+- The "top 10 share" uses a fixed cut-off, which is not meaningful on very small datasets.
+- Category totals can overlap when a row has several values (for example sectors), so they may add up to more than the overall total.
+- The AI writes the prose, and it can occasionally misquote a figure. Numbers are computed in code, but the generated text is not automatically validated against them.
+- The generate endpoint has no authentication or rate limiting, so anyone with the URL can use the Gemini quota.
+- Free tiers apply: Gemini rate limits, Cloudflare Workers' 10 ms CPU time per request, and KV's eventual consistency (a new blog can take a moment to appear everywhere).
