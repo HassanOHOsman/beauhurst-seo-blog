@@ -44,3 +44,20 @@ server/api/blog/[slug].get.ts  loads a saved blog
 server/utils/                parser, stats, prompt, Gemini client, storage
 data/                        seed fintech CSV
 ```
+
+
+## Run it locally
+
+Requirements: Node 24.15+ (or 22.22+) and a free Gemini API key from https://aistudio.google.com/apikey.
+
+```bash
+git clone https://github.com/HassanOHOsman/beauhurst-seo-blog.git
+cd beauhurst-seo-blog
+npm install
+cp .env.example .env     # then paste your Gemini key into .env
+npm run dev
+```
+
+Open http://localhost:3000, upload `data/fintech_companies_seed.csv` with the topic "UK fintech companies", and you are redirected to the generated blog. Locally, generated blogs are stored as files in `.data/blogs` (git-ignored).
+
+To check the production build: `npm run build`.
